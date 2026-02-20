@@ -2,7 +2,12 @@
 {
 	public class LineItem
 	{
-		Money Cost { get; }
+		public Money Cost { get; }
+
+		public LineItem(Money cost)
+		{
+			Cost = cost;
+		}
 	}
 }
 

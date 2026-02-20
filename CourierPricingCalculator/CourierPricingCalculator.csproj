@@ -8,8 +8,10 @@
 
   <ItemGroup>
     <None Remove="Domain\" />
+    <None Remove="Utilities\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Domain\" />
+    <Folder Include="Utilities\" />
   </ItemGroup>
 </Project>

@@ -2,16 +2,10 @@
 {
     public class ParcelLineItem : LineItem
     {
-        public int Width { get; }
-        public int Height { get; }
-        public int Length { get; }
         public ParcelSize Size { get; }
 
-        public ParcelLineItem(int width, int height, int length, ParcelSize size)
-        {
-            Width = width;
-            Height = height;
-            Length = length;
+        public ParcelLineItem(Money cost, ParcelSize size) : base (cost)
+        { 
             Size = size;
         }
     }

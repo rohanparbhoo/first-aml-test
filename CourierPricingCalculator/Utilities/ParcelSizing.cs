@@ -6,7 +6,7 @@
         private static readonly int MediumSize = 50;
         private static readonly int LargeSize = 100;
 
-        public static ParcelSize GetSize(ParcelLineItem parcel)
+        public static ParcelSize GetSize(Parcel parcel)
 		{
             if (parcel.Width < SmallSize && parcel.Height < SmallSize && parcel.Length < SmallSize)
             {
