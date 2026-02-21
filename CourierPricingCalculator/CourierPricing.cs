@@ -5,7 +5,7 @@ namespace CourierPricingCalculator;
 
 public class CourierPricing
 {
-    public Quote Calculate(IEnumerable<Parcel> parcels)
+    public Quote Calculate(IEnumerable<Parcel> parcels, bool isSpeedyShipping = false)
     {
         if (parcels is null)
         {
@@ -28,9 +28,22 @@ public class CourierPricing
             lineItems.Add(new ParcelLineItem(parcelPrice, parcelSize));
         }
 
-        var totalCost = new Money(lineItems.Sum(lineItem => lineItem.Cost.Amount), Money.DefaultCurrencyCode);
+        var subtotal = new Money(
+            lineItems.Sum(lineItem => lineItem.Cost.Amount),
+            Money.DefaultCurrencyCode
+        );
 
-        return new Quote(totalCost, lineItems);
+        if (isSpeedyShipping && subtotal.Amount > 0m)
+        {
+            lineItems.Add(new SpeedyShippingLineItem("Speedy shipping", subtotal));
+        }
+
+        var total = new Money(
+            lineItems.Sum(lineItem => lineItem.Cost.Amount),
+            Money.DefaultCurrencyCode
+        );
+
+        return new Quote(total, lineItems);
     }
 }
 

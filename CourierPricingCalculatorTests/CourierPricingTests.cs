@@ -57,4 +57,24 @@ public class CourierPricingCalculatorTests
         Assert.Equal(expectedCost, parcelItem.Cost.Amount);
         Assert.Equal(expectedCost, quote.TotalCost.Amount);
     }
+
+    [Fact]
+    public void CourierPricing_WhenSpeedyShippingIsEnabled_DoublesTotalAndAddsLineItem()
+    {
+        var sut = CreateSut();
+
+        var parcels = new[]
+        {
+            new Parcel(9, 9, 9),
+            new Parcel(10, 10, 10),
+        };
+
+        var normalCourierPricing = sut.Calculate(parcels, false);
+        var speedyCourierPricing = sut.Calculate(parcels, true);
+
+        Assert.Equal(11m, normalCourierPricing.TotalCost.Amount);
+        Assert.Equal(22m, speedyCourierPricing.TotalCost.Amount);
+
+        Assert.Equal(normalCourierPricing.LineItems.Count + 1, speedyCourierPricing.LineItems.Count);
+    }
 }
