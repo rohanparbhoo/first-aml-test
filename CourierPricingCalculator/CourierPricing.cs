@@ -25,7 +25,24 @@ public class CourierPricing
             var parcelSize = ParcelSizing.GetSize(parcel);
             var parcelPrice = ParcelPricing.GetPrice(parcelSize);
 
-            lineItems.Add(new ParcelLineItem(parcelPrice, parcelSize));
+            var weightLimit = parcelSize switch
+            {
+                ParcelSize.Small => 1m,
+                ParcelSize.Medium => 3m,
+                ParcelSize.Large => 6m,
+                ParcelSize.Xl => 10m,
+                _ => 0m
+            };
+
+            var overweightKg = Math.Max(0m, parcel.Weight - weightLimit);
+            var overweightCharge = overweightKg * 2m;
+
+            var finalPrice = new Money(
+                parcelPrice.Amount + overweightCharge,
+                Money.DefaultCurrencyCode
+            );
+
+            lineItems.Add(new ParcelLineItem(finalPrice, parcelSize));
         }
 
         var subtotal = new Money(

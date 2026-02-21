@@ -45,7 +45,7 @@ public class CourierPricingCalculatorTests
 
         var parcels = new[]
         {
-            new Parcel(length, width, height)
+            new Parcel(length, width, height, 0)
         };
 
         var quote = sut.Calculate(parcels);
@@ -65,8 +65,8 @@ public class CourierPricingCalculatorTests
 
         var parcels = new[]
         {
-            new Parcel(9, 9, 9),
-            new Parcel(10, 10, 10),
+            new Parcel(9, 9, 9, 0),
+            new Parcel(10, 10, 10, 0),
         };
 
         var normalCourierPricing = sut.Calculate(parcels, false);
@@ -76,5 +76,20 @@ public class CourierPricingCalculatorTests
         Assert.Equal(22m, speedyCourierPricing.TotalCost.Amount);
 
         Assert.Equal(normalCourierPricing.LineItems.Count + 1, speedyCourierPricing.LineItems.Count);
+    }
+
+    [Fact]
+    public void CourierPricing_WhenParcelOverWeightLimit_AddsSurcharge()
+    {
+        var sut = CreateSut();
+
+        var parcels = new[]
+        {
+            new Parcel(9, 9, 9, 3m)
+        };
+
+        var quote = sut.Calculate(parcels);
+
+        Assert.Equal(7m, quote.TotalCost.Amount);
     }
 }
